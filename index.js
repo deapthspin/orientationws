@@ -1,9 +1,9 @@
 const WebSocket = require('ws')
 
 const server = new WebSocket.Server({
-    port: 4200
+    port: 443
 }, () => {
-    console.log('server started at port 4200')
+    console.log('server started at port 443')
 })
 
 const users = new Set()
