@@ -38,6 +38,12 @@ const sendQuestion = (message) => {
     })
 }
 
+const sendTimeout = (message) => {
+    users.forEach((user) => {
+        user.ws.send(JSON.stringify(message))
+    })
+}
+
 
 server.on('connection', (ws) => {
     const userRef = {
@@ -99,6 +105,16 @@ server.on('connection', (ws) => {
                     msgType: data.msgType,
                     img: data.img,
                     options: data.options
+                })
+            } catch(err) {
+                console.error(err)
+            }
+        } else if(data.msgType === 'timeout') {
+            try {
+                console.log(`${data.username} has connected to room-${data.roomId}`)
+                sendTimeout({
+                    roomId: data.roomId,
+                    msgType: data.msgType
                 })
             } catch(err) {
                 console.error(err)
