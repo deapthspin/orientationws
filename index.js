@@ -44,6 +44,11 @@ const sendTimeout = (message) => {
     })
 }
 
+const sendScores = (message) => {
+    users.forEach((user) => {
+        user.ws.send(JSON.stringify(message))
+    })
+}
 
 server.on('connection', (ws) => {
     const userRef = {
@@ -119,7 +124,18 @@ server.on('connection', (ws) => {
             } catch(err) {
                 console.error(err)
             }
-        } 
+        } else if(data.msgType === 'scores') {
+            try {
+                console.log(`${data.username} has connected to room-${data.roomId}`)
+                sendTimeout({
+                    roomId: data.roomId,
+                    msgType: data.msgType,
+                    score: data.score
+                })
+            } catch(err) {
+                console.error(err)
+            }
+        }
         
     })
 })
