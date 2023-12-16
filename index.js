@@ -127,10 +127,11 @@ server.on('connection', (ws) => {
         } else if(data.msgType === 'scores') {
             try {
                 console.log(`${data.username} has connected to room-${data.roomId}`)
-                sendTimeout({
+                sendScores({
                     roomId: data.roomId,
                     msgType: data.msgType,
-                    score: data.score
+                    score: data.score,
+                    name: data.name
                 })
             } catch(err) {
                 console.error(err)
