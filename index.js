@@ -50,6 +50,12 @@ const sendScores = (message) => {
     })
 }
 
+const sendQnCorrect = (message) => {
+    users.forEach((user) => {
+        user.ws.send(JSON.stringify(message))
+    })
+}
+
 server.on('connection', (ws) => {
     const userRef = {
         ws,
@@ -132,6 +138,17 @@ server.on('connection', (ws) => {
                     msgType: data.msgType,
                     score: data.score,
                     name: data.name
+                })
+            } catch(err) {
+                console.error(err)
+            }
+        } else if(data.msgType === 'qncorrect') {
+            try {
+                console.log(`${data.username} has connected to room-${data.roomId}`)
+                sendQnCorrect({
+                    roomId: data.roomId,
+                    msgType: data.msgType,
+                    username: data.username
                 })
             } catch(err) {
                 console.error(err)
