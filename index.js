@@ -56,6 +56,12 @@ const sendQnCorrect = (message) => {
     })
 }
 
+const sendAns = (message) => {
+    users.forEach((user) => {
+        user.ws.send(JSON.stringify(message))
+    })
+}
+
 server.on('connection', (ws) => {
     const userRef = {
         ws,
@@ -149,6 +155,18 @@ server.on('connection', (ws) => {
                     roomId: data.roomId,
                     msgType: data.msgType,
                     username: data.username
+                })
+            } catch(err) {
+                console.error(err)
+            }
+        } else if(data.msgType === 'sendans') {
+            try {
+                console.log(`${data.username} has connected to room-${data.roomId}`)
+                sendAns({
+                    roomId: data.roomId,
+                    msgType: data.msgType,
+                    username: data.username,
+                    ans: data.ans
                 })
             } catch(err) {
                 console.error(err)
