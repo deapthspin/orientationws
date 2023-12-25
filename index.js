@@ -68,6 +68,12 @@ const sendVote = (message) => {
     })
 }
 
+const sendLog = (message) => {
+    users.forEach((user) => {
+        user.ws.send(JSON.stringify(message))
+    })
+}
+
 server.on('connection', (ws) => {
     const userRef = {
         ws,
@@ -184,6 +190,17 @@ server.on('connection', (ws) => {
                     roomId: data.roomId,
                     msgType: data.msgType,
                     voted: data.voted
+                })
+            } catch(err) {
+                console.error(err)
+            }
+        } else if(data.msgType === 'consolelog') {
+            try {
+                console.log(`${data.username} has connected to room-${data.roomId}`)
+                sendLog({
+                    roomId: data.roomId,
+                    msgType: data.msgType,
+                    msg: data.msg
                 })
             } catch(err) {
                 console.error(err)
