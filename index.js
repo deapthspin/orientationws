@@ -74,6 +74,12 @@ const sendLog = (message) => {
     })
 }
 
+const sendUpScore = (message) => {
+    users.forEach((user) => {
+        user.ws.send(JSON.stringify(message))
+    })
+}
+
 server.on('connection', (ws) => {
     const userRef = {
         ws,
@@ -201,6 +207,17 @@ server.on('connection', (ws) => {
                     roomId: data.roomId,
                     msgType: data.msgType,
                     msg: data.msg
+                })
+            } catch(err) {
+                console.error(err)
+            }
+        } else if(data.msgType === 'upscore') {
+            try {
+                console.log(`${data.username} has connected to room-${data.roomId}`)
+                sendUpScore({
+                    roomId: data.roomId,
+                    msgType: data.msgType,
+                    name: data.name
                 })
             } catch(err) {
                 console.error(err)
